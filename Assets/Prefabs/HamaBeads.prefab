@@ -533,6 +533,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdafe7d29307b97409f1b747124518a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSensor: 0
+  sensorLength: 0.4
+  hasSensorDetected: 0
   nameEntity: "\u5186\u67F1"
   nameGuide: Guide
   posGuideY: 0.5
@@ -554,6 +557,7 @@ MonoBehaviour:
   - serializedVersion: 2
     rgba: 4278190080
   color: 0
+  state: 0
 --- !u!23 &6686357617973311126
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.45140398, g: 0.5008938, b: 0.57231677, a: 1}
+  m_IndirectSpecularColor: {r: 0.4514032, g: 0.5008929, b: 0.5723151, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -807,8 +807,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objBead: {fileID: 9039278423786260228, guid: 5f4e29f8ca7720d43a329e3278ef050c, type: 3}
+  objPlate: {fileID: 155867910}
   textAsset: {fileID: 4900000, guid: faabd3e5b8f1610439bcd38803908645, type: 3}
   nameBeadEntity: "\u5186\u67F1"
+  nameTagSensor: BeadsSensor
+  flagClear: 0
+  BeadScale: 1
 --- !u!33 &3001259635397687477
 MeshFilter:
   m_ObjectHideFlags: 0
