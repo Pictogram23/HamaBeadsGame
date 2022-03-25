@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HamaBeads : MonoBehaviour
 {
-    enum State
+    public enum State
     {
         Wait,
         Catched,
@@ -12,9 +12,12 @@ public class HamaBeads : MonoBehaviour
     }
 
     public bool isSensor = false;
+    public float sensorLength = 0.25f;
+    public bool hasSensorDetected = false;
     public string nameEntity;
     public string nameGuide;
     public float posGuideY;
+    public float BeadScale;
     public Color32[] pallet = new Color32[8];
     public int color;
     /// <summary>
@@ -28,7 +31,7 @@ public class HamaBeads : MonoBehaviour
     /// 7: Black
     /// </summary>
 
-    State state;
+    public State state;
 
     GameObject entity;
     GameObject guide;
@@ -127,17 +130,35 @@ public class HamaBeads : MonoBehaviour
         else
         {
             Vector3 myPos = entity.transform.position;
-            Ray ray = new Ray(myPos, new Vector3(myPos.x, 8, 0));
             RaycastHit hit = new RaycastHit();
-            int distance = 10;
-            Debug.DrawLine(ray.origin, ray.direction * distance, Color.red);
-            if(Physics.Raycast(ray, out hit, distance))
+            float radius = (entity.transform.lossyScale.x / 4) * 3;
+            if (Physics.SphereCast(transform.position, radius, transform.up, out hit, sensorLength * BeadScale))
             {
-                if(hit.collider.gameObject.GetComponentInParent<HamaBeads>().color == color)
+                HamaBeads hitBead = hit.collider.gameObject.transform.parent.GetComponent<HamaBeads>();
+
+                if (hitBead.color == color)
                 {
-                    Debug.Log("OK!");
+                    hasSensorDetected = true;
+                }
+                else
+                {
+                    hasSensorDetected = false;
                 }
             }
+            else
+            {
+                hasSensorDetected = false;
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (isSensor == true)
+        {
+            float radius = (entity.transform.lossyScale.x / 4) * 3;
+            Gizmos.DrawWireSphere(transform.position + transform.up * sensorLength * BeadScale, radius);
+            Gizmos.DrawRay(transform.position, transform.up * sensorLength);
         }
     }
 
