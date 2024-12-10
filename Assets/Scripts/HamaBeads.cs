@@ -11,7 +11,13 @@ public class HamaBeads : MonoBehaviour
         Released,
     }
 
-    public bool isSensor = false;
+    public enum Mode
+    {
+        Playable,
+        Sensor,
+        Decoration,
+    }
+    public Mode mode = Mode.Playable;
     public float sensorLength = 0.25f;
     public bool hasSensorDetected = false;
     public string nameEntity;
@@ -103,58 +109,59 @@ public class HamaBeads : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isSensor == false)
+        switch(mode)
         {
-            Vector3 posGuide = entity.transform.position;
-            posGuide.y = posGuideY;
+            case Mode.Playable:
+                Vector3 posGuide = entity.transform.position;
+                posGuide.y = posGuideY;
 
-            switch (state)
-            {
-                case State.Catched:
-                    entity.GetComponent<Rigidbody>().isKinematic = true;
-                    entity.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-                    Vector3 mousePos = Input.mousePosition;
-                    Vector3 destination = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 5.8f));
-                    entity.transform.position = destination;
-
-                    guide.SetActive(true);
-                    guide.transform.position = posGuide;
-                    guide.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-                    break;
-                case State.Released:
-                    entity.GetComponent<Rigidbody>().isKinematic = false;
-                    guide.SetActive(false);
-                    break;
-            }
-        }
-        else
-        {
-            Vector3 myPos = entity.transform.position;
-            RaycastHit hit = new RaycastHit();
-            float radius = (entity.transform.lossyScale.x / 4) * 3;
-            if (Physics.SphereCast(transform.position, radius, transform.up, out hit, sensorLength * BeadScale))
-            {
-                HamaBeads hitBead = hit.collider.gameObject.transform.parent.GetComponent<HamaBeads>();
-
-                if (hitBead.color == color)
+                switch (state)
                 {
-                    hasSensorDetected = true;
+                    case State.Catched:
+                        entity.GetComponent<Rigidbody>().isKinematic = true;
+                        entity.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+                        Vector3 mousePos = Input.mousePosition;
+                        Vector3 destination = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 5.8f));
+                        entity.transform.position = destination;
+
+                        guide.SetActive(true);
+                        guide.transform.position = posGuide;
+                        guide.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                        break;
+                    case State.Released:
+                        entity.GetComponent<Rigidbody>().isKinematic = false;
+                        guide.SetActive(false);
+                        break;
+                }
+                break;
+            case Mode.Sensor:
+                Vector3 myPos = entity.transform.position;
+                RaycastHit hit = new RaycastHit();
+                float radius = (entity.transform.lossyScale.x / 4) * 3;
+                if (Physics.SphereCast(transform.position, radius, transform.up, out hit, sensorLength * BeadScale))
+                {
+                    HamaBeads hitBead = hit.collider.gameObject.transform.parent.GetComponent<HamaBeads>();
+
+                    if (hitBead.color == color)
+                    {
+                        hasSensorDetected = true;
+                    }
+                    else
+                    {
+                        hasSensorDetected = false;
+                    }
                 }
                 else
                 {
                     hasSensorDetected = false;
                 }
-            }
-            else
-            {
-                hasSensorDetected = false;
-            }
+                break;
         }
     }
 
     private void OnDrawGizmos()
     {
-        if (isSensor == true)
+        if (mode == Mode.Sensor)
         {
             float radius = (entity.transform.lossyScale.x / 4) * 3;
             Gizmos.DrawWireSphere(transform.position + transform.up * sensorLength * BeadScale, radius);

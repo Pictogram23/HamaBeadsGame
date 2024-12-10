@@ -54,7 +54,7 @@ public class Guide : MonoBehaviour
                     gameObject.transform.GetChild(0).GetComponent<Rigidbody>().useGravity = false;
                     HamaBeads hamaBeads = gameObject.GetComponent<HamaBeads>();
                     hamaBeads.color = GuideMap[x, y] - 1;
-                    hamaBeads.isSensor = true;
+                    hamaBeads.mode = HamaBeads.Mode.Sensor;
                     hamaBeads.tag = nameTagSensor;
                     hamaBeads.BeadScale = BeadScale;
                 }
